@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-import { mockData } from '../data/mockData';
 
 export default function ExchangeMoneyService(axiosInstance) {
   async function getExchangeInfo() {

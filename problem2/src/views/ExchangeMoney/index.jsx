@@ -1,7 +1,7 @@
 import InputField from '@/components/InputField';
 import Loading from '@/components/Loading';
 import baseApi from '@/services/baseService';
-import ExchangeMoneyService from '@/services/ExchangeMoneyService';
+import ExchangeMoneyService from '@/services/exchangeMoneyService';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 import {
