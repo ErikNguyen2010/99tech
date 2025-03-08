@@ -5,10 +5,9 @@ export default function ExchangeMoneyService(axiosInstance) {
   async function getExchangeInfo() {
     try {
       const result = await axiosInstance.get(
-        'http://interview.switcheo.com/prices.json'
+        'http://localhost:3000/get-currency'
       );
-      console.log(result);
-      return mockData;
+      return result.data;
     } catch (err) {
       console.log(err);
     }
