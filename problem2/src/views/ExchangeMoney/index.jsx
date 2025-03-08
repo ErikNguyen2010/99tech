@@ -148,7 +148,7 @@ const ExchangeMoney = () => {
         <form onSubmit={handleSubmit}>
           {isLoading ? (
             <Grid2 container alignItems='center' justifyContent='center'>
-              <Grid2 pt={isDevice ? 12 : 6} size={{ xs: 12, md: 12 }}>
+              <Grid2 pt={isDevice ? 12 : 7} size={{ xs: 12, md: 12 }}>
                 <Loading />
               </Grid2>
             </Grid2>

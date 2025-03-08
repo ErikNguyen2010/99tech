@@ -8,7 +8,10 @@ export default function ExchangeMoneyService(axiosInstance) {
       );
       return result.data;
     } catch (err) {
-      console.log(err);
+      return {
+        isError: true,
+        errData: err.response.data,
+      }
     }
   }
 
