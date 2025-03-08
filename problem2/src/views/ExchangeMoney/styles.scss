@@ -1,11 +1,11 @@
 .form {
     &-background {
         width: 100%;
-        height: -webkit-fill-available;
+        height: 100vh;
         display: flex;
         justify-content: center;
         align-items: flex-end;
-        bottom: 0px;
+        bottom: 0;
         flex-wrap: wrap;
 
         &::after {
@@ -19,28 +19,86 @@
             bottom: 0px;
         }
 
-        @media screen and (max-width: 900px) {
+
+
+        @media screen and (max-width: 1200px) {
             &::after {
                 display: none;
             }
+
+            overflow: hidden;
+        }
+
+
+        @media screen and (max-width: 992px) {
+            &::after {
+                display: none;
+            }
+
+            overflow: hidden;
+        }
+
+        @media screen and (max-width: 480px) {
+            &::after {
+                display: none;
+            }
+
+            overflow: hidden;
         }
 
     }
 
     &-container {
-        display: grid;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         background-color: #ffff;
         border-radius: 2rem;
-        height: 20rem;
-        width: 70%;
         bottom: 15rem;
+        height: 42vh;
+
+        width: 90%;
+        max-width: 1000px;
+        box-shadow: 0px 18px 36px -18px rgba(0, 0, 0, 0.1);
         position: absolute;
+        --tw-shadow: 0px 18px 36px -18px rgba(0, 0, 0, .1), 0px 30px 45px -30px rgba(50, 50, 93, .1);
+        --tw-shadow-colored: 0px 18px 36px -18px var(--tw-shadow-color), 0px 30px 45px -30px var(--tw-shadow-color);
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+
+
+        @media screen and (max-width: 1200px) {
+            width: 95%;
+            padding: 1.5rem;
+            height: 30rem;
+            bottom: 20%;
+            overflow: hidden;
+
+        }
+
+
+
+        @media screen and (max-width: 992px) {
+            width: 95%;
+            padding: 1.5rem;
+            height: 30rem;
+            bottom: 20%;
+            overflow: hidden;
+
+        }
+
+
+        @media screen and (max-width: 480px) {
+            width: 95%;
+            padding: 1.5rem;
+            height: 31rem;
+            bottom: 20%;
+            overflow: hidden;
+
+        }
 
         form {
             border-radius: 2rem;
-            --tw-shadow: 0px 18px 36px -18px rgba(0, 0, 0, .1), 0px 30px 45px -30px rgba(50, 50, 93, .1);
-            --tw-shadow-colored: 0px 18px 36px -18px var(--tw-shadow-color), 0px 30px 45px -30px var(--tw-shadow-color);
-            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+
         }
     }
 
@@ -48,11 +106,65 @@
         font-weight: 600 !important;
         padding: 2rem 0;
 
+        @media screen and (max-width: 1200px) {
+            padding-bottom: 10px;
+            padding-top: 0;
+            font-size: 1.5rem !important;
+
+        }
+
+
+        @media screen and (max-width: 992px) {
+            padding-bottom: 10px;
+            padding-top: 0;
+            font-size: 1.2rem !important;
+
+        }
+
     }
 
+
     &-icon {
+
+        @media screen and (max-width: 1200px) {
+            padding: 10px 0;
+
+        }
+
+        @media screen and (max-width: 992px) {
+            padding: 10px 0;
+
+        }
+
+
         &-button {
             font-size: 1.5rem;
+        }
+    }
+
+    &-bottom {
+        padding-top: 32px;
+
+
+        @media screen and (max-width: 1200px) {
+            padding-top: 0px;
+        }
+
+
+        @media screen and (max-width: 992px) {
+            padding-top: 0px;
+        }
+
+        &-exchange-detail {
+            @media screen and (max-width: 1200px) {
+                padding-top: 1rem;
+                padding-bottom: 0.4rem;
+            }
+
+            @media screen and (max-width: 992px) {
+                padding-top: 1rem;
+                padding-bottom: 0.4rem;
+            }
         }
     }
 

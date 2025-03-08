@@ -3,7 +3,14 @@ import Loading from '@/components/Loading';
 import baseApi from '@/services/baseService';
 import ExchangeMoneyService from '@/services/ExchangeMoneyService';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
-import { Button, Grid2, IconButton, Typography } from '@mui/material';
+import SwapVertIcon from '@mui/icons-material/SwapVert';
+import {
+  Button,
+  Grid2,
+  IconButton,
+  Typography,
+  useMediaQuery,
+} from '@mui/material';
 import { useFormik } from 'formik';
 import { isEmpty, uniqBy } from 'lodash';
 import { useEffect, useState } from 'react';
@@ -23,6 +30,7 @@ const ExchangeMoney = () => {
   const [exchangeInfo, setExchangeInfo] = useState({});
   const [count, setCount] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const isDevice = useMediaQuery('(max-width:1200px)');
 
   const api = ExchangeMoneyService(baseApi);
   const validationSchema = yup.object({
@@ -119,6 +127,7 @@ const ExchangeMoney = () => {
 
   useEffect(() => {
     (async () => {
+      setIsLoading(true);
       const res = await api.getExchangeInfo();
       const uniqArr = uniqBy(res, 'currency');
       const temp = uniqArr.map((item) => ({
@@ -128,6 +137,7 @@ const ExchangeMoney = () => {
 
       setCurrencyOption(temp);
       setExchangeData(uniqArr);
+      setIsLoading(false);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -138,7 +148,7 @@ const ExchangeMoney = () => {
         <form onSubmit={handleSubmit}>
           {isLoading ? (
             <Grid2 container alignItems='center' justifyContent='center'>
-              <Grid2 pt={6} size={{ xs: 12, md: 12 }}>
+              <Grid2 pt={isDevice ? 12 : 6} size={{ xs: 12, md: 12 }}>
                 <Loading />
               </Grid2>
             </Grid2>
@@ -148,7 +158,7 @@ const ExchangeMoney = () => {
                 Exchange Token
               </Typography>
               <Grid2 alignItems='center' justifyContent='center' container>
-                <Grid2 size={{ xs: 12, md: 5.5 }}>
+                <Grid2 size={{ xs: 12, sm: 12, md: 12, lg: 5.5 }}>
                   <InputField
                     inputId={'fromAmount'}
                     inputName={'fromAmount'}
@@ -166,7 +176,9 @@ const ExchangeMoney = () => {
                     helperText={touched.fromAmount && errors.fromAmount}
                   />
                 </Grid2>
-                <Grid2 size={{ xs: 12, md: 1 }}>
+                <Grid2
+                  className='form-icon'
+                  size={{ xs: 12, sm: 12, md: 1, lg: 1 }}>
                   <IconButton
                     disabled={isLoading || !isEmpty(errors)}
                     onClick={handleSwapCurrency}
@@ -182,10 +194,10 @@ const ExchangeMoney = () => {
                       },
                     }}
                     color='primary'>
-                    <SwapHorizIcon />
+                    {isDevice ? <SwapVertIcon /> : <SwapHorizIcon />}
                   </IconButton>
                 </Grid2>
-                <Grid2 size={{ xs: 12, md: 5.5 }}>
+                <Grid2 size={{ xs: 12, sm: 12, md: 12, lg: 5.5 }}>
                   <InputField
                     inputId={'toAmount'}
                     inputName={'toAmount'}
@@ -202,11 +214,13 @@ const ExchangeMoney = () => {
                 </Grid2>
               </Grid2>
 
-              <Grid2 pt={4} container>
-                <Grid2 size={{ xs: 12, md: 4 }} pl={7}>
+              <Grid2 className='form-bottom' container>
+                <Grid2
+                  className='form-bottom-exchange-detail'
+                  size={{ xs: 12, sm: 12, md: 12, lg: 4 }}>
                   <ExchangeDetail exchangeInfo={exchangeInfo} data={values} />
                 </Grid2>
-                <Grid2 size={{ xs: 12, md: 4 }}>
+                <Grid2 size={{ xs: 12, sm: 12, md: 12, lg: 4 }}>
                   <Button
                     loading={isLoading}
                     loadingPosition='start'
@@ -223,7 +237,7 @@ const ExchangeMoney = () => {
                     Confirm
                   </Button>
                 </Grid2>
-                <Grid2 size={{ xs: 0, md: 4 }}></Grid2>
+                <Grid2 size={{ xs: 0, sm: 0, md: 0, lg: 4 }}></Grid2>
               </Grid2>
             </>
           )}
