@@ -1,4 +1,4 @@
-import { FormControl, MenuItem, Select } from '@mui/material';
+import { FormControl, FormHelperText, MenuItem, Select } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { makeStyles } from '@mui/styles';
@@ -31,6 +31,9 @@ const InputField = ({
   onChangeSelect,
   isDisableInput,
   isDisableSelect,
+  handleBlur,
+  helperText,
+  error,
 }) => {
   const classes = useStyles();
 
@@ -42,6 +45,22 @@ const InputField = ({
     onChangeSelect(event);
   };
 
+  const handleKeyDown = (event) => {
+    const { value } = event.target;
+
+    if (
+      ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight'].includes(event.key)
+    ) {
+      return;
+    }
+    if (event.key === '.' && value.includes('.')) {
+      event.preventDefault();
+    }
+    if (!/[0-9.]/.test(event.key)) {
+      event.preventDefault();
+    }
+  };
+
   return (
     <FormControl className='form-input'>
       <OutlinedInput
@@ -51,8 +70,14 @@ const InputField = ({
         value={inputValue}
         onChange={handleChangeInput}
         disabled={isDisableInput}
+        error={error}
+        onBlur={handleBlur}
+        onKeyDown={(event) => {
+          handleKeyDown(event);
+        }}
         inputProps={{
           autoComplete: 'off',
+          inputMode: 'decimal',
         }}
         sx={{
           '& .MuiInputBase-root': {
@@ -61,7 +86,7 @@ const InputField = ({
           },
 
           '& .MuiInputBase-input.Mui-disabled': {
-            WebkitTextFillColor: '#0000004d', // Change this to the color you prefer
+            WebkitTextFillColor: '#0000004d',
           },
 
           fontSize: '1.5rem',
@@ -100,6 +125,18 @@ const InputField = ({
           </InputAdornment>
         }
       />
+      {error && (
+        <FormHelperText
+          sx={{
+            fontSize: '18px',
+            color: '#d915159e',
+            fontWeight: 600,
+            textAlign: 'left',
+            marginLeft: '4px',
+          }}>
+          {helperText}
+        </FormHelperText>
+      )}
     </FormControl>
   );
 };

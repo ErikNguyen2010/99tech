@@ -45,8 +45,9 @@
     }
 
     &-title {
-        font-size: 1.3rem;
-        font-weight: 600;
+        font-weight: 600 !important;
+        padding: 2rem 0;
+
     }
 
     &-icon {

@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react';
-import * as yup from 'yup';
 import InputField from '@/components/InputField';
-import { useFormik } from 'formik';
+import Loading from '@/components/Loading';
 import baseApi from '@/services/baseService';
 import ExchangeMoneyService from '@/services/ExchangeMoneyService';
-import { uniqBy } from 'lodash';
-import ExchangeDetail from './ExchangeDetail';
-import { Button, Grid2, IconButton } from '@mui/material';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
+import { Button, Grid2, IconButton, Typography } from '@mui/material';
+import { useFormik } from 'formik';
+import { isEmpty, uniqBy } from 'lodash';
+import { useEffect, useState } from 'react';
+import * as yup from 'yup';
+import ExchangeDetail from './ExchangeDetail';
 import './styles.scss';
 
 const defaultFormData = {
@@ -24,11 +25,26 @@ const ExchangeMoney = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const api = ExchangeMoneyService(baseApi);
-  const validationSchema = yup.object({});
+  const validationSchema = yup.object({
+    fromAmount: yup
+      .string()
+      .test('is-positive', 'Amount must be greater than 0', (value) => {
+        return value && parseFloat(value) > 0;
+      })
+      .required('Amount is required'),
+  });
 
-  const { handleSubmit, handleChange, values, setValues } = useFormik({
+  const {
+    handleSubmit,
+    handleChange,
+    values,
+    setValues,
+    handleBlur,
+    touched,
+    errors,
+  } = useFormik({
     initialValues: defaultFormData,
-    // validationSchema: validationSchema,
+    validationSchema: validationSchema,
     // validateOnChange: validateAfterSubmit,
     // validateOnBlur: validateAfterSubmit,
     onSubmit: async () => {
@@ -120,82 +136,97 @@ const ExchangeMoney = () => {
     <div className='form-background'>
       <div className='form-container'>
         <form onSubmit={handleSubmit}>
-          <h5 className='form-title'>Exchange Token</h5>
-          <Grid2 alignItems='center' justifyContent='center' container>
-            <Grid2 size={{ xs: 5.5, md: 5.5 }}>
-              <InputField
-                inputId={'fromAmount'}
-                inputName={'fromAmount'}
-                inputValue={values.fromAmount}
-                onChangeInput={handleChange}
-                selectId={'fromCurrency'}
-                selectName={'fromCurrency'}
-                selectValue={values.fromCurrency}
-                onChangeSelect={handleChange}
-                currencyOption={currencyOption}
-                isDisableInput={isLoading}
-                isDisableSelect={isLoading}
-              />
+          {isLoading ? (
+            <Grid2 container alignItems='center' justifyContent='center'>
+              <Grid2 pt={6} size={{ xs: 12, md: 12 }}>
+                <Loading />
+              </Grid2>
             </Grid2>
-            <Grid2 size={{ xs: 1, md: 1 }}>
-              <IconButton
-                disabled={isLoading}
-                onClick={handleSwapCurrency}
-                className='form-icon-button'
-                aria-label='delete'
-                size='large'
-                sx={{
-                  '& .MuiSvgIcon-root': {
-                    fontSize: '3rem',
-                  },
-                  '&:focus': {
-                    outline: 'none',
-                  },
-                }}
-                color='primary'>
-                <SwapHorizIcon />
-              </IconButton>
-            </Grid2>
-            <Grid2 size={{ xs: 5.5, md: 5.5 }}>
-              <InputField
-                inputId={'toAmount'}
-                inputName={'toAmount'}
-                inputValue={values.toAmount}
-                onChangeInput={handleChange}
-                selectId={'toCurrency'}
-                selectName={'toCurrency'}
-                selectValue={values.toCurrency}
-                onChangeSelect={handleChange}
-                currencyOption={currencyOption}
-                isDisableInput={true}
-                isDisableSelect={isLoading}
-              />
-            </Grid2>
-          </Grid2>
+          ) : (
+            <>
+              <Typography component='h5' variant='h5' className='form-title'>
+                Exchange Token
+              </Typography>
+              <Grid2 alignItems='center' justifyContent='center' container>
+                <Grid2 size={{ xs: 12, md: 5.5 }}>
+                  <InputField
+                    inputId={'fromAmount'}
+                    inputName={'fromAmount'}
+                    inputValue={values.fromAmount}
+                    onChangeInput={handleChange}
+                    selectId={'fromCurrency'}
+                    selectName={'fromCurrency'}
+                    selectValue={values.fromCurrency}
+                    onChangeSelect={handleChange}
+                    currencyOption={currencyOption}
+                    isDisableInput={isLoading}
+                    isDisableSelect={isLoading}
+                    handleBlur={handleBlur}
+                    error={touched.fromAmount && Boolean(errors.fromAmount)}
+                    helperText={touched.fromAmount && errors.fromAmount}
+                  />
+                </Grid2>
+                <Grid2 size={{ xs: 12, md: 1 }}>
+                  <IconButton
+                    disabled={isLoading || !isEmpty(errors)}
+                    onClick={handleSwapCurrency}
+                    className='form-icon-button'
+                    aria-label='delete'
+                    size='large'
+                    sx={{
+                      '& .MuiSvgIcon-root': {
+                        fontSize: '3rem',
+                      },
+                      '&:focus': {
+                        outline: 'none',
+                      },
+                    }}
+                    color='primary'>
+                    <SwapHorizIcon />
+                  </IconButton>
+                </Grid2>
+                <Grid2 size={{ xs: 12, md: 5.5 }}>
+                  <InputField
+                    inputId={'toAmount'}
+                    inputName={'toAmount'}
+                    inputValue={values.toAmount}
+                    onChangeInput={handleChange}
+                    selectId={'toCurrency'}
+                    selectName={'toCurrency'}
+                    selectValue={values.toCurrency}
+                    onChangeSelect={handleChange}
+                    currencyOption={currencyOption}
+                    isDisableInput={true}
+                    isDisableSelect={isLoading}
+                  />
+                </Grid2>
+              </Grid2>
 
-          <Grid2 pt={3} container>
-            <Grid2 size={{ xs: 5.5, md: 4 }} pl={7}>
-              <ExchangeDetail exchangeInfo={exchangeInfo} data={values} />
-            </Grid2>
-            <Grid2 size={{ xs: 5.5, md: 4 }}>
-              <Button
-                loading={isLoading}
-                loadingPosition='start'
-                type='submit'
-                variant='contained'
-                disabled={isLoading}
-                sx={{
-                  fontSize: '1.5rem',
-                  fontWeight: 600,
-                  '&:focus': {
-                    outline: 'none',
-                  },
-                }}>
-                Confirm
-              </Button>
-            </Grid2>
-            <Grid2 size={{ xs: 5.5, md: 4 }}></Grid2>
-          </Grid2>
+              <Grid2 pt={4} container>
+                <Grid2 size={{ xs: 12, md: 4 }} pl={7}>
+                  <ExchangeDetail exchangeInfo={exchangeInfo} data={values} />
+                </Grid2>
+                <Grid2 size={{ xs: 12, md: 4 }}>
+                  <Button
+                    loading={isLoading}
+                    loadingPosition='start'
+                    type='submit'
+                    variant='contained'
+                    disabled={isLoading || !isEmpty(errors)}
+                    sx={{
+                      fontSize: '1.5rem',
+                      fontWeight: 600,
+                      '&:focus': {
+                        outline: 'none',
+                      },
+                    }}>
+                    Confirm
+                  </Button>
+                </Grid2>
+                <Grid2 size={{ xs: 0, md: 4 }}></Grid2>
+              </Grid2>
+            </>
+          )}
         </form>
       </div>
     </div>
