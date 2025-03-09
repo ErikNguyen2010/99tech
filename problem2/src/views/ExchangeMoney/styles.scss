@@ -64,17 +64,13 @@
         --tw-shadow-colored: 0px 18px 36px -18px var(--tw-shadow-color), 0px 30px 45px -30px var(--tw-shadow-color);
         box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 
-        @media screen and (max-width: 1930px) {
-            bottom: 18rem;
-
-        }
 
 
-        @media screen and (max-width: 1200px) {
+        @media screen and (max-width: 1230px) {
             width: 95%;
             padding: 1.5rem;
             height: 30rem;
-            bottom: 20%;
+            bottom: 13rem;
             overflow: hidden;
 
         }
