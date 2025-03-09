@@ -4,7 +4,10 @@ export default function ExchangeMoneyService(axiosInstance) {
       const result = await axiosInstance.get('/get-currency');
       return result.data;
     } catch (err) {
-      console.log(err);
+      return {
+        isError: true,
+        errData: err.response.data,
+      };
     }
   }
 
