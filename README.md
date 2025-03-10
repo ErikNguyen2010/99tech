@@ -5,3 +5,5 @@ On problem 2:<br>
 ** Have back-end server <br>
 ** Link deploy FE : https://99tech-token-exchange.vercel.app <br>
 ** Link deploy BE : https://nine9tech-swap-currency.onrender.com/get-currency<br>
+
+Open link deploy BE first , when it render completely then open link deploy FE
